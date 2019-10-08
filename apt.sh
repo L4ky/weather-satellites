@@ -35,6 +35,16 @@ cat wxtoimg.log
 
 #direction=`less wxtoimg.log  | grep Direction | awk '{print $2}'`
 
+
+# RAW:
+$wxdir/wxtoimg -m ${file}-map.png -k "%N" -k "%d/%m/%Y - %H:%M UTC" -k "fontsize=14 %D %E %z" -k "fontsize=14 Pristine" -b -c -p -o ${file}_res.wav $file-pristine.png &> PRISTINE.log
+cat IR.log
+error=`cat IR.log | grep -i "warning"`
+if  [ ! -z "$error" ]; then
+    mv $file-IR.png $output/noaa/deleted/
+    echo $file $error >> errors.log
+fi
+
 # IR:
 $wxdir/wxtoimg -m ${file}-map.png -k "%N" -k "%d/%m/%Y - %H:%M UTC" -k "fontsize=14 %D %E %z" -k "fontsize=14 IR" -b -e histeq -c -o ${file}_res.wav $file-IR.png &> IR.log
 cat IR.log
@@ -74,6 +84,7 @@ fi
 rm -rf ${file}-map.png
 rm -rf ${file}_res.wav
 rm -rf  wxtoimg.log
+rm -rf PRISTINE.log
 rm -rf IR.log
 rm -rf HVC.log
 rm -rf HVCT.log
