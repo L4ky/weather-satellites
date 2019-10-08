@@ -28,15 +28,25 @@ fi
 rm -fr passages.*
 
 # Update Satellite Information
-echo -e "\nUpdate Satellite Information..."
+echo -e "\nUpdate Weather Satellite Information..."
 wget -qr https://www.celestrak.com/NORAD/elements/weather.txt -O weather.txt
 if [ "$?" -eq "0" ]; then
-    grep "NOAA 15" weather.txt -A 2 > weather.tle
-    grep "NOAA 18" weather.txt -A 2 >> weather.tle
-    grep "NOAA 19" weather.txt -A 2 >> weather.tle
-    grep "METEOR-M 2" weather.txt -A 2 >> weather.tle
-    grep "METEOR-M2 2" weather.txt -A 2 >> weather.tle
+    grep "NOAA 15" weather.txt -A 2 > filtered_tle.tle
+    grep "NOAA 18" weather.txt -A 2 >> filtered_tle.tle
+    grep "NOAA 19" weather.txt -A 2 >> filtered_tle.tle
+    grep "METEOR-M 2" weather.txt -A 2 >> filtered_tle.tle
+    grep "METEOR-M2 2" weather.txt -A 2 >> filtered_tle.tle
     rm -rf weather.txt
+    echo "...done"
+else
+    echo "...no network"
+fi
+
+echo -e "\nUpdate ISS Satellite Information..."
+wget -qr https://www.celestrak.com/NORAD/elements/stations.txt -O stations.txt
+if [ "$?" -eq "0" ]; then
+    grep "ISS (ZARYA)" stations.txt -A 2 >> filtered_tle.tle
+    rm -rf stations.txt
     echo "...done"
 else
     echo "...no network"
@@ -46,7 +56,8 @@ echo -e "\nMinimum elevation:" $min_el
 
 today=`date +'%Y%m%d'`
 
-for sat in "NOAA 15" "NOAA 18" "NOAA 19" "METEOR-M 2" "METEOR-M2 2"; do
+for sat in "NOAA 15" "NOAA 18" "NOAA 19" "METEOR-M 2" "METEOR-M2 2" "ISS (ZARYA)"; do
+#for sat in "NOAA 15" "NOAA 18" "NOAA 19" "METEOR-M 2" "METEOR-M2 2"; do
     
     time=`date +%s`
     

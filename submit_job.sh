@@ -42,6 +42,10 @@ if [ "$sat" == "METEOR-M22" ]; then
     sampling=120
 fi
 
+if [ "$sat" == "ISS(ZARYA)" ]; then
+    frequency=145.800
+    sampling=48
+fi
 # Logging:
 echo `date --date=@${start} +%Y%m%d-%H%M%S` $sat $elevation>> recordings.log
 
@@ -97,8 +101,15 @@ if [ "$specie" == "METEOR-M" ] || [ "$specie" == "METEOR-M2" ]; then
     
 fi
 
-
-
-
+if [ "$specie" == "ISS" ]; then
+    
+    # Record: (-p 0.0, 55.0 ppm ????, added -E dc -A fast)
+    echo "timeout $rectime rtl_fm  -f ${frequency}M -s ${sampling}k -g 40 -p 0.0 -E wav -E dc -E deemp -F 9 - | sox -t raw -e signed -c 1 -b 16 -r ${sampling}k - '${output}/sstv/${filename}.wav' &>> jobs.log"  > job.txt 
+    echo "/bin/bash sox '${output}/sstv/${filename}.wav' -r 11025 ${output}/sstv/${filename}_res.mmv vol 12 dB" >> job.txt
 
     
+    # Submission:
+    at $at_start -f job.txt &> /dev/null
+    cat job.txt >> job_history.txt
+    rm job.txt
+fi
