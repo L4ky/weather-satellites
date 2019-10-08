@@ -21,7 +21,7 @@ start=`echo $filename | awk -F_ '{print $filename}'`
 start=`echo ${start:0:8} ${start:9:2}:${start:11:2}:${start:13:2}`
 start=`date -d "${start}" +%s`
 
-tle=$dir/weather.tle
+tle=$dir/filtered_tle.tle
 
 # resampling
 rm -rf ${file}.png
