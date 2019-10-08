@@ -73,7 +73,7 @@ fi
 
 # Clean up
 rm -rf ${file}-map.png
-rm -rf ${file}_res.wav
+#rm -rf ${file}_res.wav
 rm -rf  wxtoimg.log
 rm -rf PRISTINE.log
 rm -rf IR.log
