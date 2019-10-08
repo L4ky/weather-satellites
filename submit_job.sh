@@ -43,7 +43,7 @@ if [ "$sat" == "METEOR-M22" ]; then
 fi
 
 if [ "$sat" == "ISS(ZARYA)" ]; then
-    frequency=145.800
+    frequency=${ISSZARYA}
     sampling=48
 fi
 # Logging:
